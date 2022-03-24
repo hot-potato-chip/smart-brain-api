@@ -11,10 +11,11 @@ const image = require('./controllers/image');
 
 const db = knex({
   // connect to your own database here:
-  client: 'pg',
+  client: 'mysql',
   connection: {
     host : '127.0.0.1',
-    user : 'aneagoie',
+    port : 3306,
+    user : 'smart-brain',
     password : '',
     database : 'smart-brain'
   }

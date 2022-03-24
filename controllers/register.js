@@ -11,7 +11,8 @@ const handleRegister = (req, res, db, bcrypt) => {
       })
       .into('login')
       .returning('email')
-      .then(loginEmail => {
+      .then(async loginEmail => {
+        loginEmail = await db('login').where('id',loginEmail[0])
         return trx('users')
           .returning('*')
           .insert({
@@ -23,14 +24,18 @@ const handleRegister = (req, res, db, bcrypt) => {
             name: name,
             joined: new Date()
           })
-          .then(user => {
+          .then(async user => {
+            user = await db('users').where('id',user[0])
             res.json(user[0]);
           })
       })
       .then(trx.commit)
       .catch(trx.rollback)
     })
-    .catch(err => res.status(400).json('unable to register'))
+    .catch(err => {
+      console.log(err);
+      res.status(400).json('unable to register')
+    })
 }
 
 module.exports = {
